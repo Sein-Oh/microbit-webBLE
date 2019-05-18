@@ -64,7 +64,7 @@ mwb.uart.send = function(str) {
 		for (var i = 0; i < str.length; i++) {
 			arr[i] = str[i].charCodeAt()
 		}
-		characteristic.writeValue(arr + "\n");
+		characteristic.writeValue(arr);
 	})
 }
 
