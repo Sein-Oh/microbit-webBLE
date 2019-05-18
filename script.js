@@ -12,7 +12,7 @@ mwb.uart ={
 // callback(x, y, z)
 mwb.uart.start = function(callback) {
 	if (!navigator.bluetooth) {
-		alert("実行できません。ブラウザでBluetoothがサポートされていません。")
+		alert("Error!")
 		return
 	}
 	var $this = this;
@@ -64,7 +64,7 @@ mwb.uart.send = function(str) {
 		for (var i = 0; i < str.length; i++) {
 			arr[i] = str[i].charCodeAt()
 		}
-		characteristic.writeValue(arr)
+		characteristic.writeValue(arr + "\n");
 	})
 }
 
