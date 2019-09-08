@@ -1,36 +1,61 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<script type="text/javascript" src="./script.js"></script>
-<title></title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script type="text/javascript" src="./script.js"></script>
+    <title></title>
 </head>
+<style>
+    body {
+        background-color: rgb(150, 150, 150);
+        text-align: center;
+        -webkit-user-select: none;
+    }
+
+    button {
+        width: 200px;
+        height: 90px;
+        margin: 6px 1px 6px 1px;
+        font-size: 30px;
+        color: white;
+        background-color: rgb(51, 51, 51);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 9px rgba(104, 104, 104, 0.5);
+    }
+
+    button:active {
+        box-shadow: 0 5px rgba(104, 104, 104, 0.5);
+        transform: translateY(4px);
+    }
+</style>
 
 <body>
-<form name="js">
-micro:bit BLE
-<input type="button" value="Connect" onclick="connect();"/>
-<input type="button" value="Disconnect" onclick="disconnect();" /><br />
-<input type="button" value="send A" onclick="send('A\n');" /><br />
-<input type="button" value="send B" onclick="send('B\n');" /><br />
-  UART<br />
- S=<input type="text" name="s" value="" />
-</form>
-<script type="text/javascript">
-// disconnect process
-function disconnect () {
-	mwb.uart.stop();
-}
-function send (str) {
-	mwb.uart.send(str);
-}
-function connect () {
-	console.log(navigator.bluetooth);
-	mwb.uart.start(function (s) {
-		document.js.s.value = s
-	})
-}
-</script>
+    <form name="js">
+        <button onclick='connect()'>Connect</button>
+        <button onclick='disconnect()'>Disconnect</button>
+        <br>
+        <br>
+        <button onclick="send('A\n');">A</button>
+        <button onclick="send('B\n');">B</button>
+    </form>
+    <script type="text/javascript">
+        // disconnect process
+        function disconnect() {
+            mwb.uart.stop();
+        }
+        function send(str) {
+            mwb.uart.send(str);
+        }
+        function connect() {
+            console.log(navigator.bluetooth);
+            mwb.uart.start(function (s) {
+                document.js.s.value = s
+            })
+        }
+    </script>
 </body>
+
 </html>
