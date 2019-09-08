@@ -33,27 +33,23 @@
 </style>
 
 <body>
-    <form name="js">
-        <button onclick='connect()'>Connect</button>
-        <button onclick='disconnect()'>Disconnect</button>
-        <br>
-        <br>
-        <button onclick="send('A\n');">A</button>
-        <button onclick="send('B\n');">B</button>
-    </form>
+    <button onclick='connect()'>Connect</button>
+    <button onclick='disconnect()'>Disconnect</button>
+    <br>
+    <br>
+    <button onclick="send('A\n');">A</button>
+    <button onclick="send('B\n');">B</button>
     <script type="text/javascript">
         // disconnect process
         function disconnect() {
             mwb.uart.stop();
         }
         function send(str) {
-            mwb.uart.send(str);
+            console.log(str);
+            //mwb.uart.send(str);
         }
         function connect() {
-            console.log(navigator.bluetooth);
-            mwb.uart.start(function (s) {
-                document.js.s.value = s
-            })
+            mwb.uart.start();
         }
     </script>
 </body>
