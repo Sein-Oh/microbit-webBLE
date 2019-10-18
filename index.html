@@ -157,12 +157,12 @@
       clearBackground();
       drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
       acc = "STOP";
-      accPrev = "STOP";
       steer = "MIDDLE";
-      steerPrev = "MIDDLE";
       onTouch = false;
       send(acc);
       send(steer);
+      accPrev = acc;
+      steerPrev = steer;
     }
 
     function send(msg) {
