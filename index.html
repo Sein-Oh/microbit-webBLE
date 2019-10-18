@@ -1,6 +1,23 @@
 <!DOCTYPE html>
 <html>
 <style>
+  .body,
+  .layer {
+    position:absolute;
+    top:0px;
+    width:100%;
+    height:100%;
+    margin:0;
+    overflow-y:hidden;
+  }
+
+  .body{
+    z-index:1;
+  }
+  .layer{
+    z-index:2;
+  }
+
   body {
     -webkit-user-select: none;
   }
@@ -23,8 +40,8 @@
   }
 </style>
 
-<body>
-  <div align='center'>
+<body class='body'>
+  <div align='center' class='layer'>
     <button onclick="connect()">Connect</button>
     <button onclick="disconnect()">Disconnect</button>
     <br><br>
@@ -32,14 +49,18 @@
   </div>
   <script type="text/javascript" src="./script.js"></script>
   <script>
+    let filter = "win16|win32|win64|mac|macintel";
     let width, height;
-    if (window.innerWidth > 600){
+    if(0 > filter.indexOf(navigator.platform.toLowerCase())){
+      console.log("Mobile mode.");
       width = 600;
       height = 600;
     }else{
+      console.log("PC mode");
       width = 300;
       height = 300;
     }
+    
     let joy = document.getElementById("joy");
     joy.width = width;
     joy.height = height;
@@ -71,7 +92,7 @@
       onTouch = true;
     }
 
-    let moveMax = width/7.5;
+    let moveMax = width/4;
     let msgPrev = "s";
     let msg = "s";
     function move(event) {
@@ -92,7 +113,7 @@
         clearBackground();
         drawCircle(width/2 + moveX, height/2 + moveY, width/6, "rgb(255,000,051)");
 
-        const moveRange = width/8.5;
+        const moveRange = width/10;
         if (moveX >= moveRange) msg = "d";
         else if (moveX <= -moveRange) msg = "a";
         else if (moveY <= -moveRange) msg = "w";
