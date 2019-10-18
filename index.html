@@ -144,11 +144,11 @@
         else if(moveX > moveStep*4 && moveX <= moveStep*5) steer = "RIGHT-4";
 
         if (acc != accPrev) {
-          send(acc);
+          setTimeout(send(acc), 0);
           accPrev = acc;
         }
         if (steer != steerPrev) {
-          send(steer);
+          setTimeout(send(steer), 0);
           steerPrev = steer;
         }
       }
@@ -159,8 +159,8 @@
       acc = "STOP";
       steer = "MIDDLE";
       onTouch = false;
-      send(acc);
-      send(steer);
+      setTimeout(send(acc), 0);
+      setTimeout(send(steer), 0);
       accPrev = acc;
       steerPrev = steer;
     }
