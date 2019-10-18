@@ -32,9 +32,17 @@
   </div>
   <script type="text/javascript" src="./script.js"></script>
   <script>
+    let width, height;
+    if (window.innerWidth > 600){
+      width = 600;
+      height = 600;
+    }else{
+      width = 300;
+      height = 300;
+    }
     let joy = document.getElementById("joy");
-    joy.width = 300;
-    joy.height = 300;
+    joy.width = width;
+    joy.height = height;
     joy.addEventListener("touchstart", down);
     joy.addEventListener("touchmove", move);
     joy.addEventListener("touchend", up);
@@ -46,7 +54,7 @@
     ctx.font = "italic 20px Calibri";
     ctx.lineWidth = 10;
     clearBackground();
-    drawCircle(150, 150, 50, "rgb(255,000,051)");
+    drawCircle(width/2, height/2, width/6, "rgb(255,000,051)");
     ctx.fillStyle = "black";
     ctx.fillText("Command : ", 20, 20);
     let startX, startY, moveX, moveY;
@@ -63,7 +71,7 @@
       onTouch = true;
     }
 
-    let moveMax = 40;
+    let moveMax = width/7.5;
     let msgPrev = "s";
     let msg = "s";
     function move(event) {
@@ -82,12 +90,13 @@
         else if (moveY < -moveMax) moveY = -moveMax;
 
         clearBackground();
-        drawCircle(150 + moveX, 150 + moveY, 50, "rgb(255,000,051)");
+        drawCircle(width/2 + moveX, height/2 + moveY, width/6, "rgb(255,000,051)");
 
-        if (moveX >= 35) msg = "d";
-        else if (moveX <= -35) msg = "a";
-        else if (moveY <= -35) msg = "w";
-        else if (moveY >= 35) msg = "x";
+        const moveRange = width/8.5;
+        if (moveX >= moveRange) msg = "d";
+        else if (moveX <= -moveRange) msg = "a";
+        else if (moveY <= -moveRange) msg = "w";
+        else if (moveY >= moveRange) msg = "x";
 
         if (msg != msgPrev) {
           send(msg);
@@ -99,7 +108,7 @@
 
     function up() {
       clearBackground();
-      drawCircle(150, 150, 50, "rgb(255,000,051)");
+      drawCircle(width/2, height/2, width/6, "rgb(255,000,051)");
       msg = "s";
       msgPrev = "s";
       onTouch = false;
@@ -107,7 +116,7 @@
     }
 
     function send(msg) {
-      ctx.clearRect(0, 0, joy.width, 20);
+      ctx.clearRect(0, 0, width, 20);
       ctx.fillStyle = "black";
       ctx.fillText("Command : " + msg, 20, 20);
       const toBit = msg + "\n";
@@ -118,7 +127,7 @@
       ctx.clearRect(0, 20, joy.width, joy.height);
       ctx.beginPath();
       ctx.strokeStyle = "rgb(153,000,051)";
-      ctx.arc(150, 150, 90, 0, 2 * Math.PI);
+      ctx.arc(width/2, height/2, width/3, 0, 2 * Math.PI);
       ctx.stroke();
     }
 
