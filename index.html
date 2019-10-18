@@ -159,8 +159,8 @@
       acc = "STOP";
       steer = "MIDDLE";
       onTouch = false;
-      setTimeout(send(acc), 0);
       setTimeout(send(steer), 0);
+      setTimeout(send(acc), 0);
       accPrev = acc;
       steerPrev = steer;
     }
