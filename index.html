@@ -68,7 +68,7 @@
       btnConnect.style.height = "50px";
       btnDisconnect.style.width = "200px";
       btnDisconnect.style.height = "50px";
-      
+
     }
     let joy = document.getElementById("joy");
     joy.width = width;
@@ -103,7 +103,7 @@
       onTouch = true;
     }
 
-    function padZero(n){
+    function padZero(n) {
       n = n + '';
       return n.length >= 3 ? n : new Array(3 - n.length + 1).join('0') + n;
     }
@@ -126,8 +126,8 @@
         else if (moveY < -moveMax) moveY = -moveMax;
         clearBackground();
         drawCircle(width / 2 + moveX, height / 2 + moveY, width / 5, "rgb(255,000,051)");
-        x = padZero(Math.round((moveX + moveMax) * (0.9 * width/400)));
-        y = padZero(Math.round((moveY + moveMax) * (0.9 * width/400)));
+        x = padZero(Math.round((moveX + moveMax) * (0.9 * 400 / width)));
+        y = padZero(Math.round((moveY + moveMax) * (0.9 * 400 / width)));
         send();
       }
     }
@@ -142,17 +142,17 @@
       setTimeout(stop, 100);
     }
 
-    function stop(){
-        mwb.uart.send('STOP\n');
+    function stop() {
+      mwb.uart.send('STOP\n');
     }
 
     function send() {
       ctx.clearRect(0, 0, width, 20);
       ctx.fillStyle = "black";
       ctx.fillText("X :" + x, 20, 20);
-      ctx.fillText("Y : " + y, 100, 20);  
+      ctx.fillText("Y : " + y, 100, 20);
       command = String(x) + String(y);
-      if(command != commandPrev) {
+      if (command != commandPrev) {
         mwb.uart.send(command + '\n');
         console.log(command);
       }
