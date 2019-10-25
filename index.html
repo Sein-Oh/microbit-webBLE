@@ -120,6 +120,7 @@
         else if (moveY < -moveMax) moveY = -moveMax;
         clearBackground();
         drawCircle(width / 2 + moveX, height / 2 + moveY, width / 5, "rgb(255,000,051)");
+        /*
         const moveStep = width / 20;
         if (moveY <= moveStep && moveY >= -moveStep) acc = "STOP";
         else if (moveY < -moveStep && moveY >= -moveStep * 2) acc = "GO";
@@ -142,24 +143,28 @@
         else if(moveX > moveStep*2 && moveX <= moveStep*3) steer = "RIGHT-2";
         else if(moveX > moveStep*3 && moveX <= moveStep*4) steer = "RIGHT-3";
         else if(moveX > moveStep*4 && moveX <= moveStep*5) steer = "RIGHT-4";
-
+        */
+        acc = Math.round((moveX + moveMax) * (180/(moveMax*2)));
+        steer = Math.round((moveY + moveMax) * (180/(moveMax*2)));
         if (acc != accPrev) {
           send(acc);
           accPrev = acc;
         }
+        /*
         if (steer != steerPrev) {
           send(steer);
           steerPrev = steer;
         }
+        */
       }
     }
     function up() {
       clearBackground();
       drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
-      acc = "STOP";
-      steer = "MIDDLE";
+      acc = 90;
+      steer = 90;
       onTouch = false;
-      send("STOP-MIDDLE");
+      send(acc);
       accPrev = acc;
       steerPrev = steer;
     }
