@@ -87,10 +87,15 @@
     drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
     ctx.fillStyle = "black";
     ctx.fillText("Accel : ", 20, 20);
-    ctx.fillText("Steer : ", width / 2 + 40, 20);
+    ctx.fillText("Steer : ", width / 1.4, 20);
     let startX, startY, moveX, moveY;
     let joyPos = joy.getBoundingClientRect();
     let onTouch = false;
+
+    function addZero(n){
+        n = n + '';
+        return n.length >= 3 ? n : new Array(3 - n.length + 1).join('0') + n;
+    }
 
     function down(event) {
       try {
@@ -104,10 +109,7 @@
     }
 
     let moveMax = width / 4;
-    let acc = 90;
-    let accPrev = 90;
-    let steer = 90;
-    let steerPrev = 90;
+    let acc, steer, command;
 
     function move(event) {
       if (onTouch) {
@@ -125,34 +127,28 @@
         clearBackground();
         drawCircle(width / 2 + moveX, height / 2 + moveY, width / 5, "rgb(255,000,051)");
 
-        steer = Math.round((moveX + moveMax) * (180/(moveMax*2)));
-        acc = Math.round((moveY + moveMax) * (180/(moveMax*2)));
-        if (acc != accPrev) {
-          send('a' + acc);
-        }
-        if (steer != steerPrev) {
-          send('s' + steer);
-        }
+        acc = addZero(Math.round((moveY + moveMax) * (180/(moveMax*2))));
+        steer = addZero(Math.round((moveX + moveMax) * (180/(moveMax*2))));
+        send();
       }
     }
+
     function up() {
       clearBackground();
       drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
-      acc = 90;
-      steer = 90;
       onTouch = false;
-      send('STOP');
+      acc = "090";
+      steer = "090";
+      send();
     }
 
-    function send(msg) {
+    function send() {
       ctx.clearRect(0, 0, width, 20);
-      const toBit = msg + "\n";
-      mwb.uart.send(toBit);
-      accPrev = acc;
-      steerPrev = steer;
       ctx.fillStyle = "black";
       ctx.fillText("Accel : " + acc, 20, 20);
-      ctx.fillText("Steer :" + steer, width / 2 + 40, 20);
+      ctx.fillText("Steer :" + steer, width / 1.4, 20);
+      command = acc + steer;
+      mwb.uart.send(command + '\n');
     }
     function clearBackground() {
       ctx.clearRect(0, 20, joy.width, joy.height);
