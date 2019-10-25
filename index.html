@@ -140,6 +140,11 @@
       acc = "090";
       steer = "090";
       send();
+      setTimeout(stop, 100);
+    }
+
+    function stop(){
+        mwb.uart.send('090090\n');
     }
 
     function send() {
