@@ -87,7 +87,7 @@
     drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
     ctx.fillStyle = "black";
     ctx.fillText("X : ", 20, 20);
-    ctx.fillText("Y : ", 80, 20);
+    ctx.fillText("Y : ", 100, 20);
     let startX, startY, moveX, moveY;
     let joyPos = joy.getBoundingClientRect();
     let onTouch = false;
@@ -101,6 +101,11 @@
         startY = Math.round(event.clientY - joyPos.top);
       }
       onTouch = true;
+    }
+
+    function padZero(n){
+      n = n + '';
+      return n.length >= 3 ? n : new Array(3 - n.length + 1).join('0') + n;
     }
 
     let moveMax = width / 4;
@@ -121,15 +126,8 @@
         else if (moveY < -moveMax) moveY = -moveMax;
         clearBackground();
         drawCircle(width / 2 + moveX, height / 2 + moveY, width / 5, "rgb(255,000,051)");
-
-        if(width == 400) {
-            y = Math.round((0.04 * moveY) + 5);
-            x = Math.round((0.04 * moveX) + 5);
-        }else{
-            y = Math.round((0.02 * moveY) + 5);
-            x = Math.round((0.02 * moveX) + 5);
-        }
-        
+        x = padZero(Math.round((moveX + moveMax) * (0.9 * width/400)));
+        y = padZero(Math.round((moveY + moveMax) * (0.9 * width/400)));
         send();
       }
     }
@@ -138,23 +136,26 @@
       clearBackground();
       drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
       onTouch = false;
-      y = 5;
-      x = 5;
+      x = "090";
+      y = "090";
       send();
       setTimeout(stop, 100);
     }
 
     function stop(){
-        mwb.uart.send('55\n');
+        mwb.uart.send('STOP\n');
     }
 
     function send() {
       ctx.clearRect(0, 0, width, 20);
       ctx.fillStyle = "black";
       ctx.fillText("X :" + x, 20, 20);
-      ctx.fillText("Y : " + y, 80, 20);  
+      ctx.fillText("Y : " + y, 100, 20);  
       command = String(x) + String(y);
-      if(command != commandPrev) mwb.uart.send(command + '\n');
+      if(command != commandPrev) {
+        mwb.uart.send(command + '\n');
+        console.log(command);
+      }
       commandPrev = command;
     }
     function clearBackground() {
