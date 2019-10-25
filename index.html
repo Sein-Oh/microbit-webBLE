@@ -104,7 +104,7 @@
     }
 
     let moveMax = width / 4;
-    let x, y, command;
+    let x, y, command, commandPrev;
 
     function move(event) {
       if (onTouch) {
@@ -154,8 +154,8 @@
       ctx.fillText("X :" + x, 20, 20);
       ctx.fillText("Y : " + y, 80, 20);  
       command = String(x) + String(y);
-      mwb.uart.send(command + '\n');
-      console.log(command);
+      if(command != commandPrev) mwb.uart.send(command + '\n');
+      commandPrev = command;
     }
     function clearBackground() {
       ctx.clearRect(0, 20, joy.width, joy.height);
