@@ -86,16 +86,11 @@
     clearBackground();
     drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
     ctx.fillStyle = "black";
-    ctx.fillText("Accel : ", 20, 20);
-    ctx.fillText("Steer : ", width / 1.4, 20);
+    ctx.fillText("X : ", 20, 20);
+    ctx.fillText("Y : ", 80, 20);
     let startX, startY, moveX, moveY;
     let joyPos = joy.getBoundingClientRect();
     let onTouch = false;
-
-    function addZero(n){
-        n = n + '';
-        return n.length >= 3 ? n : new Array(3 - n.length + 1).join('0') + n;
-    }
 
     function down(event) {
       try {
@@ -109,7 +104,7 @@
     }
 
     let moveMax = width / 4;
-    let acc, steer, command;
+    let x, y, command;
 
     function move(event) {
       if (onTouch) {
@@ -127,8 +122,14 @@
         clearBackground();
         drawCircle(width / 2 + moveX, height / 2 + moveY, width / 5, "rgb(255,000,051)");
 
-        acc = addZero(Math.round((moveY + moveMax) * (180/(moveMax*2))));
-        steer = addZero(Math.round((moveX + moveMax) * (180/(moveMax*2))));
+        if(width == 400) {
+            y = Math.round((0.04 * moveY) + 5);
+            x = Math.round((0.04 * moveX) + 5);
+        }else{
+            y = Math.round((0.02 * moveY) + 5);
+            x = Math.round((0.02 * moveX) + 5);
+        }
+        
         send();
       }
     }
@@ -137,23 +138,24 @@
       clearBackground();
       drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
       onTouch = false;
-      acc = "090";
-      steer = "090";
+      y = 5;
+      x = 5;
       send();
       setTimeout(stop, 100);
     }
 
     function stop(){
-        mwb.uart.send('090090\n');
+        mwb.uart.send('55\n');
     }
 
     function send() {
       ctx.clearRect(0, 0, width, 20);
       ctx.fillStyle = "black";
-      ctx.fillText("Accel : " + acc, 20, 20);
-      ctx.fillText("Steer :" + steer, width / 1.4, 20);
-      command = acc + steer;
+      ctx.fillText("X :" + x, 20, 20);
+      ctx.fillText("Y : " + y, 80, 20);  
+      command = String(y) + String(x);
       mwb.uart.send(command + '\n');
+      console.log(command);
     }
     function clearBackground() {
       ctx.clearRect(0, 20, joy.width, joy.height);
