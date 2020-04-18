@@ -41,34 +41,45 @@
 
 <body class='body'>
   <div align='center' class='layer'>
-    <button id="btnConnect" onclick="connect()">Connect</button>
-    <button id="btnDisconnect" onclick="disconnect()">Disconnect</button>
+    <button id="btnBLE" onclick="connectBLE()">Connect Micro:Bit</button>
+    <br>
+    <button id="btnSTREAM" onclick="connectSTREAM()">Connect ESP32-CAM</button>
+    <br>
+    <input id="addr" type="text" value="http://192.168.0.13:81/stream">
+    <br>
+    <img id="img" src="">
     <br><br>
+    <button onclick="left()" style="width:80px; height:100px">Left</button>
     <canvas id="joy" style="border:5px dashed #BDBDBD"></canvas>
+    <button onclick="right()" style="width:80px; height:100px">Right</button>
   </div>
   <script type="text/javascript" src="./script.js"></script>
   <script>
-    const btnConnect = document.getElementById('btnConnect');
-    const btnDisconnect = document.getElementById('btnDisconnect');
+    const btnBLE = document.getElementById("btnBLE");
+    const btnSTREAM = document.getElementById("btnSTREAM");
+    const addr = document.getElementById("addr");
+    const cam = document.getElementById("img");
     let filter = "win16|win32|win64|mac|macintel";
     let width, height;
+
     if (0 > filter.indexOf(navigator.platform.toLowerCase())) {
       console.log("Mobile mode.");
       width = 800;
       height = 800;
-      btnConnect.style.width = "400px";
-      btnConnect.style.height = "100px";
-      btnDisconnect.style.width = "400px";
-      btnDisconnect.style.height = "100px";
+      btnBLE.style.width = "800px";
+      btnBLE.style.height = "100px";
+      btnSTREAM.style.width = "800px";
+      btnSTREAM.style.height = "100px";
+      addr.style.width = "800px";
     } else {
       console.log("PC mode");
       width = 400;
       height = 400;
-      btnConnect.style.width = "200px";
-      btnConnect.style.height = "50px";
-      btnDisconnect.style.width = "200px";
-      btnDisconnect.style.height = "50px";
-
+      btnBLE.style.width = "400px";
+      btnBLE.style.height = "50px";
+      btnSTREAM.style.width = "400px";
+      btnSTREAM.style.height = "50px";
+      addr.style.width = "400px";
     }
     let joy = document.getElementById("joy");
     joy.width = width;
@@ -105,7 +116,7 @@
 
     function padZero(n) {
       n = n + '';
-      return n.length >= 3 ? n : new Array(3 - n.length + 1).join('0') + n;
+      return n.length >= 2 ? n : new Array(2 - n.length + 1).join('0') + n;
     }
 
     let moveMax = width / 4;
@@ -126,8 +137,8 @@
         else if (moveY < -moveMax) moveY = -moveMax;
         clearBackground();
         drawCircle(width / 2 + moveX, height / 2 + moveY, width / 5, "rgb(255,000,051)");
-        x = padZero(Math.round((moveX + moveMax) * (0.9 * 400 / width)));
-        y = padZero(Math.round((moveY + moveMax) * (0.9 * 400 / width)));
+        x = padZero(Math.round((moveX + moveMax) * (0.09 * 400 / width)));
+        y = padZero(Math.round((moveY + moveMax) * (0.09 * 400 / width)));
         send();
       }
     }
@@ -136,14 +147,19 @@
       clearBackground();
       drawCircle(width / 2, height / 2, width / 5, "rgb(255,000,051)");
       onTouch = false;
-      x = "090";
-      y = "090";
+      x = "09";
+      y = "09";
       send();
-      setTimeout(stop, 100);
     }
 
-    function stop() {
-      mwb.uart.send('STOP\n');
+    function left() {
+      mwb.uart.send("l" + '\n');
+      console.log("l");
+    }
+
+    function right() {
+      mwb.uart.send("r" + '\n');
+      console.log("r");
     }
 
     function send() {
@@ -171,11 +187,12 @@
       ctx.arc(x, y, r, 0, 2 * Math.PI);
       ctx.fill();
     }
-    function disconnect() {
-      mwb.uart.stop();
-    }
-    function connect() {
+    function connectBLE() {
       mwb.uart.start();
+    }
+
+    function connectSTREAM() {
+      cam.src = "http://192.168.0.13:81/stream";
     }
   </script>
 </body>
