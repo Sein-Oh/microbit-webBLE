@@ -25,7 +25,7 @@
 
   button {
     margin: 6px 1px 6px 1px;
-    font-size: 20px;
+    font-size: 18px;
     color: white;
     background-color: rgb(51, 51, 51);
     border: none;
@@ -34,7 +34,7 @@
   }
 
   button:active {
-    box-shadow: 0 5px rgba(104, 104, 104, 0.5);
+    box-shadow: 0 5px rgba(124, 93, 93, 0.5);
     transform: translateY(4px);
   }
 </style>
@@ -42,16 +42,15 @@
 <body class='body'>
   <div align='center' class='layer'>
     <button id="btnBLE" onclick="connectBLE()">Connect Micro:Bit</button>
-    <br>
     <button id="btnSTREAM" onclick="connectSTREAM()">Connect ESP32-CAM</button>
     <br>
     <input id="addr" type="text" value="http://192.168.0.13:81/stream">
     <br>
     <img id="img" src="">
     <br><br>
-    <button onclick="left()" style="width:80px; height:100px">Left</button>
+    <button onmousedown="left()" onmouseup="up()" style="width:80px; height:100px">Left</button>
     <canvas id="joy" style="border:5px dashed #BDBDBD"></canvas>
-    <button onclick="right()" style="width:80px; height:100px">Right</button>
+    <button onmousedown="right()" onmouseup="up()" style="width:80px; height:100px">Right</button>
   </div>
   <script type="text/javascript" src="./script.js"></script>
   <script>
@@ -66,18 +65,18 @@
       console.log("Mobile mode.");
       width = 800;
       height = 800;
-      btnBLE.style.width = "800px";
+      btnBLE.style.width = "400px";
       btnBLE.style.height = "100px";
-      btnSTREAM.style.width = "800px";
+      btnSTREAM.style.width = "400px";
       btnSTREAM.style.height = "100px";
       addr.style.width = "800px";
     } else {
       console.log("PC mode");
       width = 400;
       height = 400;
-      btnBLE.style.width = "400px";
+      btnBLE.style.width = "200px";
       btnBLE.style.height = "50px";
-      btnSTREAM.style.width = "400px";
+      btnSTREAM.style.width = "200px";
       btnSTREAM.style.height = "50px";
       addr.style.width = "400px";
     }
@@ -149,7 +148,8 @@
       onTouch = false;
       x = "09";
       y = "09";
-      send();
+      mwb.uart.send("0909\n");
+      console.log("up");
     }
 
     function left() {
