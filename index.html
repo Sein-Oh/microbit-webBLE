@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Micro:Bit Web BLE controller</title>
+    <title>Micro:Bit Controller</title>
     <script src="https://cdn.jsdelivr.net/npm/p5@1.11.11/lib/p5.js"></script>
     <script src="https://unpkg.com/p5.touchgui@0.5.2/lib/p5.touchgui.js"></script>
     <script src="mwb.js"></script>
@@ -10,6 +10,7 @@
     <style>
         canvas {
             touch-action: none;
+        }
     </style>
 </head>
 
@@ -70,14 +71,18 @@
 
         // Keyboard control
         if (mouseIsPressed == false) {
-            if (keyIsDown(UP_ARROW) && keyIsDown(LEFT_ARROW)) { joystick.valX = -1, joystick.valY = 1 }
-            else if (keyIsDown(UP_ARROW) && keyIsDown(RIGHT_ARROW)) { joystick.valX = 1, joystick.valY = 1 }
-            else if (keyIsDown(DOWN_ARROW) && keyIsDown(LEFT_ARROW)) { joystick.valX = -1, joystick.valY = -1 }
-            else if (keyIsDown(DOWN_ARROW) && keyIsDown(RIGHT_ARROW)) { joystick.valX = 1, joystick.valY = -1 }
-            else if (keyIsDown(UP_ARROW)) { joystick.valX = 0, joystick.valY = 1 }
-            else if (keyIsDown(DOWN_ARROW)) { joystick.valX = 0, joystick.valY = -1 }
-            else if (keyIsDown(LEFT_ARROW)) { joystick.valX = -1, joystick.valY = 0 }
-            else if (keyIsDown(RIGHT_ARROW)) { joystick.valX = 1, joystick.valY = 0 }
+            let value = 0.33
+            if (keyIsDown(SHIFT)) { value = 1 }
+            else if (keyIsDown(CONTROL)) { value = 0.66 }
+
+            if (keyIsDown(UP_ARROW) && keyIsDown(LEFT_ARROW)) { joystick.valX = -value, joystick.valY = value }
+            else if (keyIsDown(UP_ARROW) && keyIsDown(RIGHT_ARROW)) { joystick.valX = value, joystick.valY = value }
+            else if (keyIsDown(DOWN_ARROW) && keyIsDown(LEFT_ARROW)) { joystick.valX = -value, joystick.valY = -value }
+            else if (keyIsDown(DOWN_ARROW) && keyIsDown(RIGHT_ARROW)) { joystick.valX = value, joystick.valY = -value }
+            else if (keyIsDown(UP_ARROW)) { joystick.valX = 0, joystick.valY = value }
+            else if (keyIsDown(DOWN_ARROW)) { joystick.valX = 0, joystick.valY = -value }
+            else if (keyIsDown(LEFT_ARROW)) { joystick.valX = -value, joystick.valY = 0 }
+            else if (keyIsDown(RIGHT_ARROW)) { joystick.valX = value, joystick.valY = 0 }
             else { joystick.valX = 0, joystick.valY = 0 }
 
             if (keyIsDown(87)) { cmd_btn_w = "1", btn_w._active = true }
