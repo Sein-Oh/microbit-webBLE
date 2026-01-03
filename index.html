@@ -28,12 +28,11 @@
     let btn_w, btn_a, btn_d, btn_x
     let btn_connect, btn_help
 
-    let cmd_joy = "S0"
     let cmd_btn_w = "0"
     let cmd_btn_a = "0"
     let cmd_btn_d = "0"
     let cmd_btn_x = "0"
-    let cmd_prev = cmd_joy + cmd_btn_w + cmd_btn_a + cmd_btn_d + cmd_btn_x
+    let cmd_prev = "440000"
 
 
     function setup() {
@@ -114,35 +113,11 @@
                     if (controller.buttons[2].pressed) { cmd_btn_a = "1", btn_a._active = true }
                     else { cmd_btn_a = "0", btn_a._active = false }
                 }
-                // Xbox controller
-                // if (controller.buttons) {
-                //     if (controller.buttons[0].pressed) { cmd_btn_d = "1", btn_d._active = true }
-                //     else { cmd_btn_d = "0", btn_d._active = false }
-                //     if (controller.buttons[1].pressed) { cmd_btn_x = "1", btn_x._active = true }
-                //     else { cmd_btn_x = "0", btn_x._active = false }
-                //     if (controller.buttons[2].pressed) { cmd_btn_w = "1", btn_w._active = true }
-                //     else { cmd_btn_w = "0", btn_w._active = false }
-                //     if (controller.buttons[3].pressed) { cmd_btn_a = "1", btn_a._active = true }
-                //     else { cmd_btn_a = "0", btn_a._active = false }
-                // }
             }
         }
-
-        const { r, deg } = convert_coord(joystick.valX, joystick.valY)
-        const r1 = Math.round(r * 3)
-        if (r1 > 0) {
-            if (deg >= 0 && deg < 22.5) { cmd_joy = "D" + r1 }
-            else if (deg >= 22.5 && deg < 67.5) { cmd_joy = "E" + r1 }
-            else if (deg >= 67.5 && deg < 112.5) { cmd_joy = "W" + r1 }
-            else if (deg >= 112.5 && deg < 157.5) { cmd_joy = "Q" + r1 }
-            else if (deg >= 157.5 && deg < 202.5) { cmd_joy = "A" + r1 }
-            else if (deg >= 202.5 && deg < 247.5) { cmd_joy = "Z" + r1 }
-            else if (deg >= 247.5 && deg < 292.5) { cmd_joy = "X" + r1 }
-            else if (deg >= 292.5 && deg < 337.5) { cmd_joy = "C" + r1 }
-            else if (deg >= 337.5 && deg < 360) { cmd_joy = "D" + r1 }
-        } else { cmd_joy = "S0" }
-
-        const cmd = cmd_joy + cmd_btn_w + cmd_btn_a + cmd_btn_d + cmd_btn_x
+        const x = Math.round((joystick.valX + 1) * 4)
+        const y = Math.round((joystick.valY + 1) * 4)
+        const cmd = x.toString() + y.toString() + cmd_btn_w + cmd_btn_a + cmd_btn_d + cmd_btn_x
         if (cmd != cmd_prev) {
             send(cmd)
             cmd_prev = cmd
@@ -164,17 +139,6 @@
         console.log("micro:bit connected!", device.name)
         push_message(msg, "Micro:bit connected!")
         mb_connected = true
-    }
-
-    function convert_coord(x, y) {
-        let r = Math.sqrt(x * x + y * y);
-        if (r > 1) r = 1 // 최대 1로 clamp
-        let rad = Math.atan2(y, x)       // -π ~ π
-        let deg = rad * (180 / Math.PI)  // -180 ~ 180
-        if (deg < 0) deg += 360
-        r = Math.round(r * 10) / 10
-        deg = Math.round(deg)
-        return { r, deg }
     }
 
     function push_message(queue, message, max = 4) {
